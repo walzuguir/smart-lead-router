@@ -1,0 +1,19 @@
+<template>
+    <lightning-card title="Scored Leads" icon-name="standard:lead">
+        <div class="slds-p-around_medium">
+            <template lwc:if={leads.data}>
+                <lightning-datatable
+                    key-field="Id"
+                    data={leads.data}
+                    columns={columns}
+                    hide-checkbox-column>
+                </lightning-datatable>
+            </template>
+            <template lwc:if={leads.error}>
+                <p class="slds-text-color_error">
+                    Could not load leads.
+                </p>
+            </template>
+        </div>
+    </lightning-card>
+</template>

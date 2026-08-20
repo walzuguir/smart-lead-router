@@ -5,4 +5,12 @@ public with sharing class LeadTriggerHandler {
         LeadAssignmentService.assignLeads(newLeads);
     }
 
+    public static void enqueueEnrichment(List<Lead> insertedLeads) {
+        List<Id> leadIds = new List<Id>();
+        for (Lead lead : insertedLeads) {
+            leadIds.add(lead.Id);
+        }
+        System.enqueueJob(new LeadEnrichmentService(leadIds));
+    }
+
 }

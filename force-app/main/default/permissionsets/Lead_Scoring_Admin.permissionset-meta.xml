@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
-    <label>Lead Scoring Admin</label>
     <description>Grants read/edit access to the lead scoring custom fields.</description>
-    <hasActivationRequired>false</hasActivationRequired>
+    <externalCredentialPrincipalAccesses>
+        <enabled>true</enabled>
+        <externalCredentialPrincipal>Company_Enrichment_Auth-Company_Enrichment_Auth</externalCredentialPrincipal>
+    </externalCredentialPrincipalAccesses>
     <fieldPermissions>
+        <editable>true</editable>
         <field>Lead.Lead_Score__c</field>
         <readable>true</readable>
-        <editable>true</editable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>true</editable>
         <field>Lead.Lead_Temperature__c</field>
         <readable>true</readable>
-        <editable>true</editable>
     </fieldPermissions>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>Lead Scoring Admin</label>
 </PermissionSet>

@@ -3,6 +3,19 @@ public with sharing class LeadScoringService {
     private static final Integer HOT_THRESHOLD = 70;
     private static final Integer WARM_THRESHOLD = 40;
 
+    private static List<Lead_Scoring_Rule__mdt> rules {
+        get {
+            if (rules == null) {
+                rules = [
+                    SELECT Min_Employees__c, Max_Employees__c, Points__c
+                    FROM Lead_Scoring_Rule__mdt
+                ];
+            }
+            return rules;
+        }
+        set;
+    }
+
     public static void scoreLeads(List<Lead> leads) {
         for (Lead lead : leads) {
             Integer score = calculateScore(lead);
@@ -15,24 +28,28 @@ public with sharing class LeadScoringService {
         Integer score = 0;
 
         if (lead.NumberOfEmployees != null) {
-            if (lead.NumberOfEmployees > 500) {
-                score += 60;
-            } else if (lead.NumberOfEmployees >= 100) {
-                score += 40;
-            } else if (lead.NumberOfEmployees >= 20) {
-                score += 20;
-            }
+            score += pointsForEmployees(lead.NumberOfEmployees);
         }
 
         if (String.isNotBlank(lead.Email)) {
             score += 20;
         }
-
         if (String.isNotBlank(lead.Phone)) {
             score += 20;
         }
 
         return score;
+    }
+
+        private static Integer pointsForEmployees(Integer employees) {
+        for (Lead_Scoring_Rule__mdt rule : rules) {
+            Boolean acimaDoMin = employees >= rule.Min_Employees__c;
+            Boolean abaixoDoMax = rule.Max_Employees__c == null || employees <= rule.Max_Employees__c;
+            if (acimaDoMin && abaixoDoMax) {
+                return Integer.valueOf(rule.Points__c);
+            }
+        }
+        return 0;
     }
 
     private static String temperatureFor(Integer score) {
